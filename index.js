@@ -7,7 +7,7 @@ const mongoose=require('mongoose');
 
 require('./prod')(app);
 
-mongoose.connect('mongodb://localhost/Project_Minor')
+mongoose.connect('mongodb+srv://nilaygupta1998:Nyga1998!@cluster0-jok8l.mongodb.net/test')
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...'));
 

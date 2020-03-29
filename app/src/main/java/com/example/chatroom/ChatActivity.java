@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -41,6 +44,7 @@ public class ChatActivity extends AppCompatActivity {
         } catch (URISyntaxException e) {}
     }
     String name;
+    int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
 
         final Intent intent=getIntent();
         name=intent.getStringExtra("name");
+        type=intent.getIntExtra("type",-1);
 
         final EditText editText=findViewById(R.id.message2);
         Button button=findViewById(R.id.send);
@@ -114,7 +119,6 @@ public class ChatActivity extends AppCompatActivity {
                             Message m =new Message(nickName,msg);
                             messageArrayList.add(m);
                             customAdapter.notifyDataSetChanged();
-                            //recyclerView.setAdapter(customAdapter);
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -137,29 +141,39 @@ public class ChatActivity extends AppCompatActivity {
 
     private void logout()
     {
-        GoogleSignInClient mGoogleSignInClient;
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+       if(type==0)
+       {
+           GoogleSignInClient mGoogleSignInClient;
+           GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                   .requestEmail()
+                   .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+           mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
 
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(ChatActivity.this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                        Intent intent1=new Intent(ChatActivity.this,MainActivity.class);
-                        startActivity(intent1);
-                        finish();
-                    }
-                });
+           mGoogleSignInClient.signOut()
+                   .addOnCompleteListener(ChatActivity.this, new OnCompleteListener<Void>() {
+                       @Override
+                       public void onComplete(@NonNull Task<Void> task) {
+                           Intent intent1=new Intent(ChatActivity.this,MainActivity.class);
+                           startActivity(intent1);
+                           finish();
+                       }
+                   });
+       }
+       else if(type==1)
+       {
+           FacebookSdk.sdkInitialize(getApplicationContext());
+           LoginManager.getInstance().logOut();
+           AccessToken.setCurrentAccessToken(null);
+           Intent intent1=new Intent(ChatActivity.this,MainActivity.class);
+           startActivity(intent1);
+           finish();
+       }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("HAHAHA","OnDestroy called");
         mSocket.emit("kill",name);
         mSocket.disconnect();
     }

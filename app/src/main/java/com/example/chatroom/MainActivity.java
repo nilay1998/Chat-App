@@ -20,30 +20,42 @@ import com.google.android.gms.tasks.Task;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
+    GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account!=null)
+        {
+            Intent intent=new Intent(MainActivity.this,ChatActivity.class);
+            intent.putExtra("name",account.getDisplayName());
+            startActivity(intent);
+        }
+        else
+        {
+            setContentView(R.layout.activity_main);
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
 
-        signInButton=findViewById(R.id.google_signin);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-            }
-        });
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+            signInButton=findViewById(R.id.google_signin);
+            signInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                }
+            });
+        }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -58,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(this,"Welcome "+account.getEmail(),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this,"Welcome "+account.getEmail(),Toast.LENGTH_SHORT).show();
+            Intent intent=new Intent(MainActivity.this,ChatActivity.class);
+            intent.putExtra("name",account.getDisplayName());
+            startActivity(intent);
             finish();
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());

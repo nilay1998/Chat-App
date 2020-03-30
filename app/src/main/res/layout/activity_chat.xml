@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,25 +8,34 @@
     android:orientation="vertical"
     tools:context=".ChatActivity">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/messageList"
+    <LinearLayout
+        android:id="@+id/recyclerContainer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_above="@id/input"
+        android:gravity="bottom">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messageList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
 
     <LinearLayout
-        android:weightSum="3"
+        android:id="@+id/input"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
+            android:paddingLeft="8dp"
             android:id="@+id/message2"
             android:layout_weight="3"
             android:layout_width="wrap_content"
-            android:hint="your message"
+            android:hint="Type a message"
             android:layout_height="match_parent" />
 
         <Button
@@ -37,4 +46,4 @@
             android:text="send" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

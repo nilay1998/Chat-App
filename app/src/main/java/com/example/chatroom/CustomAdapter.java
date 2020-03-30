@@ -3,6 +3,8 @@ package com.example.chatroom;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,10 +14,12 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private ArrayList<Message> messagesList=new ArrayList<>();
+    String username="";
 
-    public CustomAdapter(ArrayList<Message> m)
+    public CustomAdapter(ArrayList<Message> m,String name)
     {
         messagesList=m;
+        username=name;
     }
 
 
@@ -30,7 +34,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Message m=messagesList.get(i);
-        viewHolder.name.setText(m.getNickname()+":");
+        if(username.equals(m.getNickname()))
+        {
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) viewHolder.linearLayout.getLayoutParams();
+            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            viewHolder.linearLayout.setLayoutParams(lp);
+        }
+        viewHolder.name.setText(m.getNickname());
         viewHolder.message.setText(m.getMessage());
     }
 
@@ -40,10 +50,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
+        LinearLayout linearLayout;
         TextView name;
         TextView message;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            linearLayout=itemView.findViewById(R.id.direction);
             name=itemView.findViewById(R.id.nickname);
             message=itemView.findViewById(R.id.message1);
         }

@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject object,
                             GraphResponse response) {
                         try {
-                            String name=response.getJSONObject().getString("name");
+                            String name=response.getJSONObject().getString("first_name");
                             Intent intent=new Intent(MainActivity.this,ChatActivity.class);
                             intent.putExtra("name",name);
                             intent.putExtra("type",1);
@@ -134,16 +134,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "name");
+        parameters.putString("fields", "first_name");
         request.setParameters(parameters);
         request.executeAsync();
-
     }
 
     private void startChatActivity_google(GoogleSignInAccount account)
     {
         Intent intent=new Intent(MainActivity.this,ChatActivity.class);
-        intent.putExtra("name",account.getDisplayName());
+        intent.putExtra("name",account.getGivenName());
         intent.putExtra("type",0);
         startActivity(intent);
         finish();

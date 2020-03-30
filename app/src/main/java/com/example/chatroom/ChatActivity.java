@@ -112,6 +112,7 @@ public class ChatActivity extends AppCompatActivity {
                     for(int i=0;i<arrayList.size();i++)
                     {
                         messageArrayList.add(new Message(arrayList.get(i).getSender(),arrayList.get(i).getMessage()));
+                        recyclerView.smoothScrollToPosition(customAdapter.getItemCount());
                         customAdapter.notifyDataSetChanged();
                     }
                 }
@@ -129,9 +130,13 @@ public class ChatActivity extends AppCompatActivity {
         editText=findViewById(R.id.message2);
         button=findViewById(R.id.send);
         recyclerView=findViewById(R.id.messageList);
-        customAdapter=new CustomAdapter(messageArrayList);
+        customAdapter=new CustomAdapter(messageArrayList,name);
         recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager mLayoutManager=new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLayoutManager.setStackFromEnd(true);
+        mLayoutManager.setReverseLayout(false);
+        recyclerView.setLayoutManager(mLayoutManager);
     }
 
     private void run_socket()
@@ -189,6 +194,7 @@ public class ChatActivity extends AppCompatActivity {
                             String msg=data.getString("message");
                             Message m =new Message(nickName,msg);
                             messageArrayList.add(m);
+                            recyclerView.smoothScrollToPosition(customAdapter.getItemCount());
                             customAdapter.notifyDataSetChanged();
                         }
                         catch (JSONException e) {

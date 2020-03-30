@@ -149,7 +149,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(!editText.getText().toString().isEmpty())
                 {
-                    mSocket.emit("messagedetection",name,editText.getText().toString());
+                    mSocket.emit("messagedetection",name,editText.getText().toString().trim());
                     editText.setText("");
                 }
             }

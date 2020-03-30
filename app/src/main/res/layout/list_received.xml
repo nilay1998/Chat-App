@@ -2,12 +2,10 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:paddingBottom="2dp"
-    android:paddingTop="2dp"
+    android:layout_width="match_parent"
+    android:padding="6dp"
     android:layout_height="wrap_content">
+
     <LinearLayout
         android:elevation="4dp"
         android:paddingLeft="8dp"

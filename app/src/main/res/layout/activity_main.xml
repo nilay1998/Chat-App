@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:text="LOGIN"
+        android:textSize="44dp"
+        android:textColor="#000"
+        android:textStyle="italic|bold" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_signin"
@@ -14,15 +23,15 @@
         android:layout_centerInParent="true" />
 
     <com.facebook.login.widget.LoginButton
-        android:paddingTop="13dp"
-        android:paddingBottom="13dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/google_signin"
         android:id="@+id/facebook_signin"
         android:layout_width="356dp"
         android:layout_height="wrap_content"
+        android:layout_below="@id/google_signin"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginBottom="30dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp" />
 
 </RelativeLayout>

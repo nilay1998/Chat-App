@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chatroom.Retrofit.Chat;
+import com.example.chatroom.Retrofit.NetworkClient;
+import com.example.chatroom.Retrofit.RequestService;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -34,6 +37,12 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -45,6 +54,7 @@ public class ChatActivity extends AppCompatActivity {
     }
     String name;
     int type;
+    ArrayList<Chat> arrayList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +68,41 @@ public class ChatActivity extends AppCompatActivity {
         final EditText editText=findViewById(R.id.message2);
         Button button=findViewById(R.id.send);
 
-        mSocket.connect();
 
-        mSocket.emit("join",name);
 
         final ArrayList<Message> messageArrayList=new ArrayList<>();
         final RecyclerView recyclerView=findViewById(R.id.messageList);
         final CustomAdapter customAdapter=new CustomAdapter(messageArrayList);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        Retrofit retrofit = NetworkClient.getRetrofitClient();
+        final RequestService requestService=retrofit.create(RequestService.class);
+        Call<List<Chat>> call=requestService.requestGet();
+        call.enqueue(new Callback<List<Chat>>() {
+            @Override
+            public void onResponse(Call<List<Chat>> call, Response<List<Chat>> response) {
+                if(response.body()!=null)
+                {
+                    arrayList=new ArrayList<>(response.body());
+                    for(int i=0;i<arrayList.size();i++)
+                    {
+                        messageArrayList.add(new Message(arrayList.get(i).getSender(),arrayList.get(i).getMessage()));
+                        customAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Chat>> call, Throwable t) {
+
+            }
+        });
+
+
+        mSocket.connect();
+        mSocket.emit("join",name);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

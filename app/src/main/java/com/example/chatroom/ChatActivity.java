@@ -9,6 +9,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,7 +57,13 @@ public class ChatActivity extends AppCompatActivity {
     }
     String name;
     int type;
+
+    Button button;
+    EditText editText;
     ArrayList<Chat> arrayList=new ArrayList<>();
+    ArrayList<Message> messageArrayList=new ArrayList<>();
+    RecyclerView recyclerView;
+    CustomAdapter customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,18 +74,32 @@ public class ChatActivity extends AppCompatActivity {
         name=intent.getStringExtra("name");
         type=intent.getIntExtra("type",-1);
 
-        final EditText editText=findViewById(R.id.message2);
-        Button button=findViewById(R.id.send);
+        initviews();
+        show_prev_msg();
+        run_socket();
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
 
-        final ArrayList<Message> messageArrayList=new ArrayList<>();
-        final RecyclerView recyclerView=findViewById(R.id.messageList);
-        final CustomAdapter customAdapter=new CustomAdapter(messageArrayList);
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-
+    private void show_prev_msg()
+    {
         Retrofit retrofit = NetworkClient.getRetrofitClient();
         final RequestService requestService=retrofit.create(RequestService.class);
         Call<List<Chat>> call=requestService.requestGet();
@@ -96,11 +119,23 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Chat>> call, Throwable t) {
-
+                Log.e("ChatActivity", "onFailure: "+t.getMessage());
             }
         });
+    }
 
+    private void initviews()
+    {
+        editText=findViewById(R.id.message2);
+        button=findViewById(R.id.send);
+        recyclerView=findViewById(R.id.messageList);
+        customAdapter=new CustomAdapter(messageArrayList);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
+    private void run_socket()
+    {
         mSocket.connect();
         mSocket.emit("join",name);
 
@@ -163,17 +198,7 @@ public class ChatActivity extends AppCompatActivity {
                 });
             }
         });
-
-
-        Button button1=findViewById(R.id.logout);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logout();
-            }
-        });
     }
-
 
     private void logout()
     {

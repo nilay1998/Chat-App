@@ -12,5 +12,5 @@ A real time chat room which allow multiple users to enter chat room and share me
 
 <img src="Images/Login.jpeg" width="250" /> <br/> <br/>
 <img src="Images/Google Login.jpeg" width="250" /> <br/> <br/>
-<img src="Images/Facebook Login.jpeg" width="250" /> <br/> <br/>
+<img src="Images/Faceboob Login.jpeg" width="250" /> <br/> <br/>
 <img src="Images/Messages.jpeg" width="250" /> <br/> <br/>

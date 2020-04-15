@@ -10,5 +10,5 @@ A real time chat room which allow multiple users to enter chat room and share me
  
 ## Screenshots
 
-<img src="Images/Googlr Login.jpeg" width="250" /> <br/> <br/>
+<img src="Images/Google Login.jpeg" width="250" /> <br/> <br/>
 

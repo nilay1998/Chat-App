@@ -8,3 +8,7 @@ A real time chat room which allow multiple users to enter chat room and share me
  - When a user logs out, other users will be notified that the user has left the room.
  
  
+## Screenshots
+
+<img src="Images/Googlr Login.png" width="250" /> <br/> <br/>
+
